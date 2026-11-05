@@ -7,7 +7,7 @@ import Spinner from "./Spinner";
 export default function KerdoivForm() {
     const [ isLoading, setLoading ] = useState(false)
 
-    const { register, handleSubmit, reset, formState: {
+    const { watch, register, handleSubmit, reset, formState: {
         errors, isSubmitting, isSubmitSuccessful
     } } = useForm({
         defaultValues: {
