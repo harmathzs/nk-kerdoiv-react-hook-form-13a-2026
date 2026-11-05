@@ -1,8 +1,11 @@
 /** KerdoivForm.jsx */
 import { useForm } from "react-hook-form";
 import { KERDESEK } from "./questions";
+import { useState } from "react";
 
 export default function KerdoivForm() {
+    const [ isLoading, setLoading ] = useState(false)
+
     const { register, handleSubmit, reset, formState: {
         errors, isSubmitting, isSubmitSuccessful
     } } = useForm()
@@ -15,70 +18,82 @@ export default function KerdoivForm() {
     // data.preventDefault()
     console.log("Beküldött adatok:", data);
     
+    setLoading(true)
     await new Promise((r) => setTimeout(r, 5000)); // szimulált API
+    setLoading(false)
+
     reset()
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h2>Kérdőív</h2>
-      <h3>Kitöltési útmutató: Helyes válasz = igen.</h3>
+    <>
+        {isLoading && <p>Processing answers ...</p>}
 
-      {/* --- Személyes adatok --- */}
-      <fieldset>
-        <legend>Személyes adatok</legend>
+        {!isLoading && 
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <h2>Kérdőív</h2>
+            <h3>Kitöltési útmutató: Helyes válasz = igen.</h3>
 
-        <div>
-          <label htmlFor="nev">Név</label>
-          <input
-            id="nev"
-            name="nev"
-            {...register("nev")}
-          />
-          <p className="hiba">errors.nev.message</p>
-        </div>
+            {/* --- Személyes adatok --- */}
+            <fieldset>
+                <legend>Személyes adatok</legend>
 
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email" required={true}
-            name="email"
-            {...register("email")}
-          />
-          <p className="hiba">errors.email.message</p>
-        </div>
-      </fieldset>
+                <div>
+                <label htmlFor="nev">Név</label>
+                <input
+                    id="nev"
+                    name="nev"
+                    {...register("nev")}
+                />
+                <p className="hiba">errors.nev.message</p>
+                </div>
 
-      {/* --- Igen-nem kérdések --- */}
-      <fieldset>
-        <legend>Kérdések</legend>
-        {KERDESEK.map( (kerdes, index) => <div className="kerdes" key={kerdes.id}>
-            <p>{index+1}. {kerdes.szoveg}</p>
+                <div>
+                <label htmlFor="email">Email</label>
+                <input
+                    id="email"
+                    type="email" required={true}
+                    name="email"
+                    {...register("email")}
+                />
+                <p className="hiba">errors.email.message</p>
+                </div>
+            </fieldset>
 
-            <label>
-                <input type="radio" name={kerdes.id} value="igen" {...register(kerdes.id)} /> Igen
-            </label>
-            <label>
-                <input type="radio" name={kerdes.id} value="nem" {...register(kerdes.id)} /> Nem
-            </label>            
-        </div> )}
+            {/* --- Igen-nem kérdések --- */}
+            <fieldset>
+                <legend>Kérdések</legend>
+                {KERDESEK.map( (kerdes, index) => <div className="kerdes" key={kerdes.id}>
+                    <p>{index+1}. {kerdes.szoveg}</p>
 
-      </fieldset>
+                    <label>
+                        <input type="radio" name={kerdes.id} value="igen" {...register(kerdes.id)} /> Igen
+                    </label>
+                    <label>
+                        <input type="radio" name={kerdes.id} value="nem" {...register(kerdes.id)} /> Nem
+                    </label>            
+                </div> )}
 
-      <button type="submit" >
+            </fieldset>
 
-      </button>
+            <button type="submit" >
+
+            </button>
 
 
 
-      {/* --- Élő összegzés (opcionális) --- */}
-      <details style={{ marginTop: "1rem" }}>
-        <summary>Élő összegzés</summary>
-        <ul>
+            {/* --- Élő összegzés (opcionális) --- */}
+            <details style={{ marginTop: "1rem" }}>
+                <summary>Élő összegzés</summary>
+                <ul>
 
-        </ul>
-      </details>
-    </form>
+                </ul>
+            </details>
+        </form>
+        }
+                
+    </>
+    
+
   );
 }
