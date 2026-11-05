@@ -2,6 +2,7 @@
 import { useForm } from "react-hook-form";
 import { KERDESEK } from "./questions";
 import { useState } from "react";
+import Spinner from "./Spinner";
 
 export default function KerdoivForm() {
     const [ isLoading, setLoading ] = useState(false)
@@ -33,7 +34,7 @@ export default function KerdoivForm() {
 
   return (
     <>
-        {isLoading && <p>Processing answers ...</p>}
+        {isLoading && <Spinner>Processing answers ...</Spinner>}
 
         {!isLoading && 
         <form onSubmit={handleSubmit(onSubmit)}>
