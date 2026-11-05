@@ -3,20 +3,24 @@ import { useForm } from "react-hook-form";
 import { KERDESEK } from "./questions";
 
 export default function KerdoivForm() {
-
+    const { register, handleSubmit, reset, formState: {
+        errors, isSubmitting, isSubmitSuccessful
+    } } = useForm()
 
   // élő összegzéshez figyeljük a válaszokat
  
 
   const onSubmit = async (data) => {
     // data.valaszok pl.: { q1: "igen", q2: "nem", ... }
+    // data.preventDefault()
     console.log("Beküldött adatok:", data);
-    await new Promise((r) => setTimeout(r, 800)); // szimulált API
-
+    
+    await new Promise((r) => setTimeout(r, 5000)); // szimulált API
+    reset()
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <h2>Kérdőív</h2>
       <h3>Kitöltési útmutató: Helyes válasz = igen.</h3>
 
@@ -28,7 +32,8 @@ export default function KerdoivForm() {
           <label htmlFor="nev">Név</label>
           <input
             id="nev"
-           
+            name="nev"
+            {...register("nev")}
           />
           <p className="hiba">errors.nev.message</p>
         </div>
@@ -38,7 +43,8 @@ export default function KerdoivForm() {
           <input
             id="email"
             type="email" required={true}
-
+            name="email"
+            {...register("email")}
           />
           <p className="hiba">errors.email.message</p>
         </div>
@@ -51,10 +57,10 @@ export default function KerdoivForm() {
             <p>{index+1}. {kerdes.szoveg}</p>
 
             <label>
-                <input type="radio" name={kerdes.id} value="igen" /> Igen
+                <input type="radio" name={kerdes.id} value="igen" {...register(kerdes.id)} /> Igen
             </label>
             <label>
-                <input type="radio" name={kerdes.id} value="nem" /> Nem
+                <input type="radio" name={kerdes.id} value="nem" {...register(kerdes.id)} /> Nem
             </label>            
         </div> )}
 
