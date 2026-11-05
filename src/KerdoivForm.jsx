@@ -20,16 +20,25 @@ export default function KerdoivForm() {
   // élő összegzéshez figyeljük a válaszokat
  
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     // data.valaszok pl.: { q1: "igen", q2: "nem", ... }
     // data.preventDefault()
     console.log("Beküldött adatok:", data);
 
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 5000)); // szimulált API
-    setLoading(false)
+    fetch("TODO", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(console.log)
+    .catch(console.warn)
+    .finally( ()=>{
+        reset()
+        setLoading(false)
+    } )
 
-    reset()
+    
   };
 
   return (
