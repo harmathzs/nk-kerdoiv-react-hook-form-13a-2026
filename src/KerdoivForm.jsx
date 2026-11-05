@@ -16,7 +16,7 @@ export default function KerdoivForm() {
   };
 
   return (
-    <form  noValidate>
+    <form onSubmit={onSubmit}>
       <h2>Kérdőív</h2>
       <h3>Kitöltési útmutató: Helyes válasz = igen.</h3>
 
@@ -37,7 +37,7 @@ export default function KerdoivForm() {
           <label htmlFor="email">Email</label>
           <input
             id="email"
-            type="email"
+            type="email" required={true}
 
           />
           <p className="hiba">errors.email.message</p>
@@ -47,7 +47,16 @@ export default function KerdoivForm() {
       {/* --- Igen-nem kérdések --- */}
       <fieldset>
         <legend>Kérdések</legend>
+        {KERDESEK.map( (kerdes, index) => <div className="kerdes" key={kerdes.id}>
+            <p>{index+1}. {kerdes.szoveg}</p>
 
+            <label>
+                <input type="radio" name={kerdes.id} value="igen" /> Igen
+            </label>
+            <label>
+                <input type="radio" name={kerdes.id} value="nem" /> Nem
+            </label>            
+        </div> )}
 
       </fieldset>
 
